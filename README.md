@@ -25,10 +25,10 @@
 ## Technical Details
 ### Technologies/Components Used
 For Software:
-- [Languages used]
-- [Frameworks used]
-- [Libraries used]
-- [Tools used]
+- python,html
+- flask
+  jsonify, render_template, redirect, url_for
+- sqllite3
 
 For Hardware:
 - [List main components]
@@ -38,13 +38,13 @@ For Hardware:
 ### Implementation
 For Software:
 # Installation
-[commands]
+[command]
 
 # Run
-[commands]
+
 
 ### Project Documentation
-For Software:
+For Software:visual studio
 
 # Screenshots (Add at least 3)
 ![Screenshot1](Add screenshot 1 here with proper name)
@@ -84,16 +84,15 @@ For Hardware:
 
 ### Project Demo
 # Video
-[Add your demo video link here]
+(https://www.loom.com/share/c83258946b924691b0f886295cc16234?sid=a2f1cfb4-6597-49aa-b96e-2223785099c5)
 *Explain what the video demonstrates*
 
 # Additional Demos
 [Add any extra demo materials/links]
 
 ## Team Contributions
-- [Name 1]: [Specific contributions]
-- [Name 2]: [Specific contributions]
-- [Name 3]: [Specific contributions]
+- Amritha: coding,idea,design
+- 
 
 ---
 Made with ❤️ at TinkerHub
