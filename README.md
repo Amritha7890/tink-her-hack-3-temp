@@ -1,16 +1,14 @@
 
 
-# [Project Name] 🎯
+# Kerala Cuisine diet plan 🎯
 
 
 ## Basic Details
-### Team Name: [Name]
+### Team Name: code red
 
 
 ### Team Members
-- Member 1: [Name] - [College]
-- Member 2: [Name] - [College]
-- Member 3: [Name] - [College]
+- Member 1: Amritha MR - SNGCE
 
 ### Hosted Project Link
 [mention your project hosted project link here]
