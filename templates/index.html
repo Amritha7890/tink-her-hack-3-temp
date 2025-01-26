@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kerala Cuisine Diet Plan</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        form { max-width: 400px; margin: auto; }
+        label { display: block; margin: 10px 0 5px; }
+        input, select { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        button { padding: 10px 20px; background: #28a745; color: white; border: none; cursor: pointer; width: 100%; border-radius: 4px; }
+        button:hover { background: #218838; }
+        img { max-width: 100%; height: auto; display: block; margin: 20px auto; border-radius: 8px; }
+        .calorie-section { max-width: 800px; margin: 40px auto; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        .calorie-section h2 { color: #2c3e50; }
+        .calorie-section p { line-height: 1.6; }
+        .calorie-section ul { list-style-type: disc; margin-left: 20px; }
+        .calorie-calculator { margin-top: 20px; }
+        .calorie-calculator label { font-weight: bold; }
+        .calorie-calculator input[type="checkbox"] { margin-right: 10px; }
+        .calorie-calculator button { margin-top: 10px; }
+        #totalCalories { font-weight: bold; color: #28a745; }
+        .logout-button { display: block; text-align: center; margin-top: 20px; }
+
+        /* Container for the diet plan output */
+        .diet-plan-container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .diet-plan-container h2 {
+            color: #28a745;
+            text-align: center;
+        }
+        .diet-plan-container p {
+            margin: 10px 0;
+        }
+        .diet-plan-container ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+        .diet-plan-container ul li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Kerala Cuisine Healthy Diet Plan</h1>
+
+    <!-- Add the image here -->
+    <body background="{{ url_for('static', filename='images/cuisine.png') }}" alt="Kerala Food">
+
+    <!-- Logout Button (Visible only when logged in) -->
+    {% if 'user_id' in session %}
+        <div class="logout-button">
+            <a href="{{ url_for('logout') }}">
+                <button>Logout</button>
+            </a>
+        </div>
+    {% endif %}
+
+    <form id="dietForm">
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" required>
+
+        <label for="weight">Weight (kg):</label>
+        <input type="number" id="weight" name="weight" required>
+
+        <label for="height">Height (cm):</label>
+        <input type="number" id="height" name="height" required>
+
+        <label for="healthCondition">Health Condition:</label>
+        <select id="healthCondition" name="healthCondition">
+            <option value="none">None</option>
+            <option value="diabetes">Diabetes</option>
+            <option value="hypertension">Hypertension</option>
+            <option value="cholesterol">High Cholesterol</option>
+        </select>
+
+        <label for="dietPreference">Diet Preference:</label>
+        <select id="dietPreference" name="dietPreference">
+            <option value="vegetarian">Vegetarian</option>
+            <option value="non-vegetarian">Non-Vegetarian</option>
+        </select>
+
+        <button type="submit">Get Diet Plan</button>
+    </form>
+
+    <!-- Container for the diet plan output -->
+    <div id="output" class="diet-plan-container" style="margin-top: 20px;"></div>
+
+    <!-- Add the calorie measurement section -->
+    <div class="calorie-section">
+        <h2>About a Typical Kerala Meal</h2>
+        <p>
+            A typical Kerala meal, depending on the portion size and dishes included, should ideally contain around <strong>500-700 calories</strong>. 
+            This balanced meal often includes:
+        </p>
+        <ul>
+            <li><strong>Rice</strong>: The staple food, usually served with curries.</li>
+            <li><strong>Vegetables</strong>: Dishes like avial, thoran, or olan.</li>
+            <li><strong>Protein</strong>: Fish curry, chicken curry, or vegetarian options like sambar.</li>
+            <li><strong>Side Dishes</strong>: Pickles, papadum, or banana chips.</li>
+            <li><strong>Dessert</strong>: Payasam or banana (optional).</li>
+        </ul>
+        <p>
+            Our diet plans are designed to help you enjoy these traditional dishes while maintaining a healthy calorie intake. 
+            Whether you're managing diabetes, hypertension, or simply aiming for a balanced diet, we've got you covered!
+        </p>
+
+        <!-- Add a calorie calculator -->
+        <div class="calorie-calculator">
+            <h3>Calorie Calculator</h3>
+            <p>Select the dishes you've eaten to calculate the total calories:</p>
+            <form id="calorieForm">
+                <label><input type="checkbox" name="dish" value="200"> Rice (200 cal)</label><br>
+                <label><input type="checkbox" name="dish" value="150"> Fish Curry (150 cal)</label><br>
+                <label><input type="checkbox" name="dish" value="100"> Avial (100 cal)</label><br>
+                <label><input type="checkbox" name="dish" value="50"> Papadum (50 cal)</label><br>
+                <button type="button" onclick="calculateCalories()">Calculate Calories</button>
+            </form>
+            <p>Total Calories: <span id="totalCalories">0</span></p>
+        </div>
+    </div>
+
+    <script>
+        // Diet plan form submission
+        document.getElementById('dietForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const age = document.getElementById('age').value;
+            const weight = document.getElementById('weight').value;
+            const height = document.getElementById('height').value;
+            const healthCondition = document.getElementById('healthCondition').value;
+            const dietPreference = document.getElementById('dietPreference').value;
+
+            fetch('/get-diet-plan', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ age, weight, height, healthCondition, dietPreference })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('output').innerHTML = `
+                    <h2>Your Diet Plan</h2>
+                    <p><strong>Include:</strong> ${data.include.join(', ')}</p>
+                    <p><strong>Avoid:</strong> ${data.avoid.join(', ')}</p>
+                `;
+            });
+        });
+
+        // Calorie calculator function
+        function calculateCalories() {
+            const checkboxes = document.querySelectorAll('input[name="dish"]:checked');
+            let total = 0;
+            checkboxes.forEach(checkbox => {
+                total += parseInt(checkbox.value);
+            });
+            document.getElementById('totalCalories').textContent = total;
+        }
+    </script>
+</body>
+</html>
